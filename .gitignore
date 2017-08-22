@@ -149,3 +149,9 @@ local.properties
 
 # Code Recommenders
 .recommenders/
+
+# Node JS
+node_modules
+
+# webpack builds
+*/src/main/webapp/jsmodules/dist

@@ -1,0 +1,18 @@
+{
+  "name": "airsonic",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build-app": "webpack jsmodules/src/app_wp.js jsmodules/dist/app-bundle.js"
+  },
+  "author": "",
+  "license": "GPL-3.0",
+  "devDependencies": {
+    "webpack": "^3.2.0"
+  },
+  "dependencies": {
+    "jquery": "^3.2.1"
+  }
+}
