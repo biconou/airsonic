@@ -2331,13 +2331,13 @@ public class SubsonicRESTController {
     }
 
     private HttpServletRequest wrapRequest(final HttpServletRequest request, boolean jukebox) {
-        final String playerId = createPlayerIfNecessary(request, jukebox);
+        final Integer playerId = createPlayerIfNecessary(request, jukebox);
         return new HttpServletRequestWrapper(request) {
             @Override
             public String getParameter(String name) {
                 // Returns the correct player to be used in PlayerService.getPlayer()
                 if ("player".equals(name)) {
-                    return playerId;
+                    return playerId.toString();
                 }
 
                 // Support old style ID parameters.
@@ -2377,29 +2377,35 @@ public class SubsonicRESTController {
         jaxbWriter.writeErrorResponse(request, response, code, message);
     }
 
-    private String createPlayerIfNecessary(HttpServletRequest request, boolean jukebox) {
-        String username = request.getRemoteUser();
-        String clientId = request.getParameter("c");
-        if (jukebox) {
-            clientId += "-jukebox";
+    private Integer createPlayerIfNecessary(HttpServletRequest request, boolean jukebox) {
+        Integer playerId;
+        if (request.getParameter("player") == null) {
+            String username = request.getRemoteUser();
+            String clientId = request.getParameter("c");
+            if (jukebox) {
+                clientId += "-jukebox";
+            }
+
+            List<Player> players = playerService.getPlayersForUserAndClientId(username, clientId);
+
+            // If not found, create it.
+            if (players.isEmpty()) {
+                Player player = new Player();
+                player.setIpAddress(request.getRemoteAddr());
+                player.setUsername(username);
+                player.setClientId(clientId);
+                player.setName(clientId);
+                player.setTechnology(jukebox ? PlayerTechnology.JUKEBOX : PlayerTechnology.EXTERNAL_WITH_PLAYLIST);
+                playerService.createPlayer(player);
+                players = playerService.getPlayersForUserAndClientId(username, clientId);
+            }
+
+            // Return the player ID.
+            playerId = !players.isEmpty() ? players.get(0).getId() : null;
+        } else {
+            playerId = Integer.valueOf(request.getParameter("player"));
         }
-
-        List<Player> players = playerService.getPlayersForUserAndClientId(username, clientId);
-
-        // If not found, create it.
-        if (players.isEmpty()) {
-            Player player = new Player();
-            player.setIpAddress(request.getRemoteAddr());
-            player.setUsername(username);
-            player.setClientId(clientId);
-            player.setName(clientId);
-            player.setTechnology(jukebox ? PlayerTechnology.JUKEBOX : PlayerTechnology.EXTERNAL_WITH_PLAYLIST);
-            playerService.createPlayer(player);
-            players = playerService.getPlayersForUserAndClientId(username, clientId);
-        }
-
-        // Return the player ID.
-        return !players.isEmpty() ? String.valueOf(players.get(0).getId()) : null;
+        return playerId;
     }
 
     private Locale getUserLocale(HttpServletRequest request) {

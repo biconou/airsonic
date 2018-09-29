@@ -1,12 +1,6 @@
 
 var songPlayingTimerId = null;
 
-var javaJukeboxPlayerModel = {
-  currentStreamUrl : null,
-  playing : false,
-  songDuration : null,
-  songPosition : 0
-}
 
 function refreshView() {
   if (javaJukeboxPlayerModel.playing == true) {
@@ -33,7 +27,8 @@ function refreshView() {
 }
 
 function onJavaJukeboxStart() {
-  playQueueService.start();
+  console.log("onJavaJukeboxStart");
+  subsonicJukeboxStart();
   javaJukeboxPlayerModel.playing = true;
   refreshView();
 }

@@ -282,6 +282,7 @@
         onSkip(parseInt(getCurrentSongIndex()) - 1);
     }
     function onPlay(id) {
+        console.log("playQueue.jsp/onPlay");
         playQueueService.play(id, playQueueCallback);
     }
     function onPlayShuffle(albumListType, offset, size, genre, decade) {

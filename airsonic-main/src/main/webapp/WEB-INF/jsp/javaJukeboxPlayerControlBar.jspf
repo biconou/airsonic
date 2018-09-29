@@ -30,6 +30,14 @@
 </div>
 
 <script type="text/javascript" src="<c:url value='/script/playQueue/javaJukeboxPlayerControlBar.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/script/playQueue/subsonicJukeboxClient.js'/>"></script>
 <script type="text/javascript">
+    var javaJukeboxPlayerModel = {
+      player : ${model.player.id},
+      currentStreamUrl : null,
+      playing : false,
+      songDuration : null,
+      songPosition : 0
+    }
     initJavaJukeboxPlayerControlBar();
 </script>
