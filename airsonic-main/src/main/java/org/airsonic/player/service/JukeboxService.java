@@ -109,7 +109,7 @@ public class JukeboxService {
                 jukeboxLegacySubsonicService.updateJukebox(airsonicPlayer,0);
                 break;
             case JAVA_JUKEBOX:
-                jukeboxJavaService.start(airsonicPlayer);
+                jukeboxJavaService.play(airsonicPlayer);
                 break;
         }
     }

@@ -28,6 +28,7 @@ public class JukeboxJavaServiceUnitTest {
     private MediaFileService mediaFileService;
     @Mock
     private JavaPlayerFactory javaPlayerFactory;
+    private AudioPlayerRegistryService audioPlayerRegistryService;
     @Mock
     private com.github.biconou.AudioPlayer.api.Player player;
     @Mock
@@ -40,7 +41,6 @@ public class JukeboxJavaServiceUnitTest {
 
     @Before
     public void setup() {
-        service = new JukeboxJavaService(audioScrobblerService, statusService, securityService, mediaFileService, javaPlayerFactory);
         when(airsonicPlayer.getTechnology()).thenReturn(PlayerTechnology.JAVA_JUKEBOX);
         when(airsonicPlayer.getUsername()).thenReturn(USER_NAME);
         when(javaPlayerFactory.createJavaPlayer()).thenReturn(player);
@@ -48,6 +48,9 @@ public class JukeboxJavaServiceUnitTest {
         when(user.isJukeboxRole()).thenReturn(true);
         when(airsonicPlayer.getPlayQueue()).thenReturn(playQueue);
         when(playQueue.getCurrentFile()).thenReturn(mediaFile);
+
+        audioPlayerRegistryService = new AudioPlayerRegistryService(javaPlayerFactory);
+        service = new JukeboxJavaService(audioScrobblerService, statusService, securityService, mediaFileService, audioPlayerRegistryService);
     }
 
     @Test

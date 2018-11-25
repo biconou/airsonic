@@ -144,7 +144,7 @@ public class JukeboxServiceUnitTest {
         // When
         jukeboxService.start(jukeboxPlayer);
         // Then
-        verify(jukeboxJavaService).start(jukeboxPlayer);
+        verify(jukeboxJavaService).play(jukeboxPlayer);
     }
 
     @Test
